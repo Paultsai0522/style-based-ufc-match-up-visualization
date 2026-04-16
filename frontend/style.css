@@ -1,0 +1,228 @@
+
+        * {
+            background-color: #3b3b3b;  
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header {
+            height: 20px;
+            margin-left: 50px;
+            margin-bottom: 10px;
+            font-weight: 300;
+            font-size: 12px;
+            color: white;
+        }
+        /* Grid layout styling */
+        .grid-container {
+            display: grid;
+            width: 1440px; /* Set the width of the grid container */
+            height: 700px; /* Set the height of the grid container */
+            grid-template-columns: repeat(18, 1fr); /* 6 columns */
+            grid-template-rows: repeat(18, 1fr); /* 5 rows */
+            grid-gap: 10px;
+            padding: 10px;  
+            margin: 0 auto; /* Center the grid container */
+        }
+
+        .grid-item {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        #topScatterContainer {
+            grid-column: 1 / 4;
+            grid-row: 1 / 2;
+        } 
+
+        #searchScatterContainer {
+            grid-column: 4 / 10;
+            grid-row: 1 / 2;
+            position: relative;
+        } 
+
+        #scatterPlotContainer {
+            grid-column: 1 / 10;
+            grid-row: 2 / 18;
+            position: relative; /* Set relative positioning context for the buttons */
+        }
+
+        #bottomScatterContainer {
+            grid-column: 1 / 10;
+            grid-row: 18 / 19;
+            display: flex; /* Use flexbox for positioning */
+            justify-content: space-between; /* Space out items */
+            align-items: center; /* Vertically align items */
+            color: #fff;
+            gap: 0px; /* Set gap between flex items */
+        } 
+
+        #topPyramidContainer {
+            grid-column: 10 / 18;
+            grid-row: 1 / 2;
+            justify-content: space-between; /* Space out items */
+            align-items: center; /* Vertically align items */
+            color: #fff;
+        } 
+
+        #bottomScatterContainer label, #topPyramidContainer label {
+            margin-right: 10px; /* Add right margin to labels */
+            margin-left: 20px; /* Add right margin to labels */
+            margin-top: 10px;
+            white-space: nowrap; /* Prevent label text from wrapping */
+        }
+
+        #bottomScatterContainer select, #topPyramidContainer select {
+            margin-right: 20px; /* Add left margin to selects */
+            margin-top: 10px;
+        }
+
+        #pyramidChartContainer {
+            grid-column: 10 / 19;
+            grid-row: 2 / 19;
+        } 
+
+        #bottomPyramidContainer {
+            grid-column: 10 / 18;
+            grid-row: 18 / 19;
+        } 
+
+        #nothingContainer {
+            grid-column: 18 / 19;
+            grid-row: 1/ 19;
+        } 
+
+        #scatterPlotContainer button {
+            position: absolute;
+        }
+
+        #fighterSearch {
+            position: absolute;
+            top: 10px; /* Adjust as needed */
+            left: 160px; /* Adjust as needed */
+        }
+
+        #brush1Btn {
+            top: 10px; /* Adjust as needed */
+            left: 10px; /* Adjust as needed */
+        }
+
+        #brush2Btn {
+            top: 10px; /* Adjust as needed */
+            left: 80px; /* Adjust as needed */
+        }
+
+        #scatterPlot {
+            width: 100%;
+            height: calc(100% - 20px); /* Adjust the height to account for buttons, if necessary */
+            margin-top: 20px; /* Adjust the margin to push the SVG down, if necessary */
+        }
+
+        .brush1 .selection {
+            fill: rgb(239, 138, 98, 0.8);
+            fill-opacity: 0.3;
+            stroke: none;
+        }
+
+        .brush2 .selection {
+            fill: rgba(103, 169, 207, 0.8);
+            fill-opacity: 0.3;
+            stroke: none;
+        }
+
+        #brush1Btn, #brush2Btn {
+            background: #ffffff; /* White background */
+            border: 1px solid #ccc; /* Light gray border */
+            padding: 4px 6px; /* Padding around the icon */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Change cursor on hover */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+            display: inline-flex; /* Center the icon inside the button */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #brush1Btn i, #brush2Btn i {
+            font-size: 20px; /* Icon size, adjust as needed */
+            background: inherit; /* Ensure the icon inherits the button's background */
+        }
+
+        #brush1Btn:hover, #brush2Btn:hover {
+            background: #d6d6d6; /* Slightly darker background on hover */
+            border-color: #999; /* Darker border on hover */
+        }
+
+        .active-btn {
+            background: #d6d6d6 !important; /* A different color to indicate active state */
+            /* Other styles if needed */
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tooltip {
+            display: inline;
+            position: absolute;
+            width: auto;
+            height: auto;
+            background: rgb(255, 255, 255);
+            border: 10px;
+            pointer-events: none;
+            padding: 5px;
+        }
+
+        .fa-solid fa-brush {
+            background-color: #ffffff;
+        }
+
+        #RfighterSearch {
+            position: absolute; /* Use absolute positioning */
+            left: 10px;
+            right: 240px;
+            bottom: 10px;
+            top: 10px;
+            border: 1px solid #ccc; /* Light border for the search box */
+            outline: none; /* Remove default focus outline */
+            background-color: #ebebeb; /* Light background color */
+            color: #333; /* Text color */
+            font-size: 14px; /* Adjust font size as needed */
+        }
+
+        #BfighterSearch {
+            position: absolute; /* Use absolute positioning */
+            left: 240px;
+            right: 10px;            
+            bottom: 10px;
+            top: 10px;
+            border: 1px solid #ccc; /* Light border for the search box */
+            outline: none; /* Remove default focus outline */
+            background-color: #ebebeb; /* Light background color */
+            color: #333; /* Text color */
+            font-size: 14px; /* Adjust font size as needed */
+        }
+
+        #fighterSearch::placeholder {
+            color: #535353; /* Placeholder text color */
+        }
+
+        #xAxisSelect, #yAxisSelect, #dataOptionSelect, #colorSchemeSelect {
+            background-color: #ebebeb; /* Light grey background */
+            border: 1px solid #ccc; /* Light grey border */
+            font-size: 14px; /* Font size */
+            color: #333; /* Text color */
+            outline: none; /* Remove focus outline */
+            border-radius: 0; /* Remove rounded corners */
+        }
+
+        #xAxisSelect option, #yAxisSelect option , #dataOptionSelect option, #colorSchemeSelect option{
+            background-color: #ebebeb; /* Light grey background for options */
+            color: #333; /* Text color for options */
+            padding: 5px; 
+            border-radius: 0; /* Remove rounded corners */
+        }
+
+        .dropdown-option:hover {
+            background-color: #e6e6e6; /* Hover background color */
+            /* Additional hover styles */
+        }

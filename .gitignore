@@ -1,0 +1,99 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+*.dbmdl
+*.VC.db
+*.VC.VC.opendb
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# NuGet Packages
+*.nupkg
+packages/
+
+# Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+# Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# User-specific files and local settings
+*.local
+*.userprefs
+*.dotCover
+
+# Rider and VS Code workspace settings
+.vscode/
+
+# JetBrains
+*.iml
+
+# Logs
+*.log
+
+# Publish output
+publish/
+wwwroot/lib/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtualenvs
+venv/
+ENV/
+env/
+.venv/
+
+# node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Generated files
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.tmp
+*.temp
+
+# Dotnet artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
+*.mdb
+
+# Secret manager
+secrets.json
+
+# Frontend / data process caches
+.frontend/
+
+# Ignore temporary files created by editors
+*.swp
+*.swo
+*~

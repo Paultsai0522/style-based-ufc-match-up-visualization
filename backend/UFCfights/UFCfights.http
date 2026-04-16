@@ -1,0 +1,6 @@
+@UFCfights_HostAddress = http://localhost:5025
+
+GET {{UFCfights_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

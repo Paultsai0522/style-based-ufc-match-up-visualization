@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UFC Fighters Visualization Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/simple-statistics@7.0.1/dist/simple-statistics.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>UFC Fights Visualization</h1>
+    </div>
+    <div class="grid-container">      
+
+        <div class="grid-item" id="topScatterContainer">
+            <button id="brush1Btn"><i class="fa-solid fa-brush" style="color: #ef8a62;"></i></button>
+            <button id="brush2Btn"><i class="fa-solid fa-brush" style="color: #67a9cf;"></i></button>            
+        </div>        
+        
+        <div class="grid-item" id="searchScatterContainer">           
+            <input type="text" id="RfighterSearch" placeholder="Search for fighter R" >
+            <input type="text" id="BfighterSearch" placeholder="Search for fighter B" >
+        </div>        
+
+        <!-- Scatter Plot -->
+        <div class="grid-item" id="scatterPlotContainer">
+            <svg id="scatterPlot">
+                <defs>
+                    <linearGradient id="winLossGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    </linearGradient>
+                    <linearGradient id="winLossGradient-reverse" x1="100%" y1="0%" x2="0%" y2="0%">
+                    </linearGradient>                    
+                </defs>
+            </svg>
+        </div>
+
+        <div class="grid-item" id="bottomScatterContainer">
+            <!-- X-Axis Dropdown Menu -->
+            <label for="xAxisSelect">X-Axis:</label>
+            <select id="xAxisSelect">
+                <option class="dropdown-option" value="TSNE1">TSNE1</option>
+                <option value="Height">Height</option>
+                <option value="Weight">Weight</option>
+                <option value="Reach">Reach</option>
+                <option value="SLpM">SLpM (Strikes Landed per Minute)</option>
+                <option value="Str_Acc">Str_Acc (Striking Accuracy)</option>
+                <option value="SApM">SApM (Strikes Absorbed per Minute)</option>
+                <option value="Str_Def">Str_Def (Striking Defense)</option>
+                <option value="TD_Avg">TD_Avg (Takedown Average)</option>
+                <option value="TD_Acc">TD_Acc (Takedown Accuracy)</option>
+                <option value="TD_Def">TD_Def (Takedown Defense)</option>
+                <option value="Sub_Avg">Sub_Avg (Submission Average)</option>
+            </select>
+            <!-- Y-Axis Dropdown Menu -->
+            <label for="yAxisSelect">Y-Axis:</label>
+            <select id="yAxisSelect">
+                <option value="TSNE2">TSNE2</option>                
+                <option value="Height">Height</option>
+                <option value="Weight">Weight</option>
+                <option value="Reach">Reach</option>
+                <option value="SLpM">SLpM (Strikes Landed per Minute)</option>
+                <option value="Str_Acc">Str_Acc (Striking Accuracy)</option>
+                <option value="SApM">SApM (Strikes Absorbed per Minute)</option>
+                <option value="Str_Def">Str_Def (Striking Defense)</option>
+                <option value="TD_Avg">TD_Avg (Takedown Average)</option>
+                <option value="TD_Acc">TD_Acc (Takedown Accuracy)</option>
+                <option value="TD_Def">TD_Def (Takedown Defense)</option>
+                <option value="Sub_Avg">Sub_Avg (Submission Average)</option>
+            </select> 
+        </div>   
+
+        <div class="grid-item" id="topPyramidContainer">
+            <label for="dataOptionSelect">Select Data:</label>
+            <select id="dataOptionSelect">
+                <option value="historic">Historical Fights</option>
+                <option value="general">General Statistics</option>
+            </select>
+            <label for="colorSchemeSelect">Color Scheme:</label>
+            <select id="colorSchemeSelect">
+                <option value="default">Default R&B</option>
+                <option value="rdBu">RdBu correlation</option>
+            </select>                 
+        </div> 
+
+        <div class="grid-item" id="pyramidChartContainer">         
+            <svg id="pyramidChart">
+                <linearGradient id="gradient-rdBuColorScale" x1="0%" y1="0%" x2="100%" y2="0%">
+                </linearGradient>
+                <linearGradient id="gradient-ylGnColorScale" x1="0%" y1="0%" x2="100%" y2="0%">
+                </linearGradient>
+            </svg>
+        </div>    
+
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script type="module" src="scatter_plot.js"></script>
+    <script type="module"src="pyramidChart.js"></script>
+
+    <script>
+        function handleButtonClick(event) {
+            console.log("Button clicked");
+            // Remove 'active-btn' class from all buttons
+            document.querySelectorAll('#brush1Btn, #brush2Btn').forEach(btn => {
+                btn.classList.remove('active-btn');
+            });
+
+            // Add 'active-btn' class to the clicked button
+            event.currentTarget.classList.add('active-btn');
+        }
+        document.getElementById('brush1Btn').addEventListener('click', handleButtonClick);
+        document.getElementById('brush2Btn').addEventListener('click', handleButtonClick);
+    </script>
+
+</body>
+</html>
