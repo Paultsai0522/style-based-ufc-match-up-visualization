@@ -1,0 +1,17 @@
+@hostname = localhost
+@port = 5025
+@baseUrl = http://{{hostname}}:{{port}}/api/fights
+
+###
+GET {{baseUrl}}
+Accept: application/json
+
+###
+POST {{baseUrl}}/brush
+Content-Type: application/json
+
+{
+  "Brush1_fighters": ["Conor McGregor", "Adrian Yanez", "Trevin Giles"],
+  "Brush2_fighters": ["Dustin Poirer", "Gustavo Lopez", "Roman Dolidze"]
+}
+###

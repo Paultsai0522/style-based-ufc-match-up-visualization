@@ -57,184 +57,186 @@ function createColorLegend(svg, colorScale, width, height) {
         .call(g => g.select(".domain").remove());
 }
 
-function drawPyramidChart(dataPath, brush1Fighters, brush2Fighters, useFilteredData, colorScheme) {
+async function drawPyramidChart(dataPath, brush1Fighters, brush2Fighters, useFilteredData, colorScheme) {
     // Clear existing content
     const svgContainer = d3.select("#pyramidChart");
+    let dataToUse;
+
     svgContainer.selectAll("*").remove();
         
     currentBrush1Fighters = brush1Fighters;
     currentBrush2Fighters = brush2Fighters;
 
-    fetch(dataPath)
-    .then(response => response.json())
-    .then(function(fightData) {
-        console.log("Fetched fight data:", fightData);
-        // Filter fightData based on brushed fighters and fights that already happened
-        let dataToUse;
+    if (useFilteredData) {
+        // Fetch filtered data based on brushed fighters
+        const response = await fetch(`${dataPath}/brush`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Brush1_fighters: brush1Fighters,
+                Brush2_fighters: brush2Fighters
+             })
+            }
+        );
+        dataToUse = await response.json();
+        console.log("Filtered data fetched:", dataToUse);
+    } else {
+        // Use all fights
+        const response = await fetch(dataPath);
+        dataToUse = await response.json();
+    }
 
-        if (useFilteredData) {
-            // Use only fights that have already happened and involve brushed fighters
-            dataToUse = fightData.filter(fight =>
-                (brush1Fighters.includes(fight.r_fighter) && brush2Fighters.includes(fight.b_fighter) ||
-                brush1Fighters.includes(fight.b_fighter) && brush2Fighters.includes(fight.r_fighter)) &&
-                fight.Winner !== '');
-        } else {
-            // Use all fights
-            dataToUse = fightData;
-        }
+    // Filter fightData based on brushed fighters and fights that already happened
 
-        // console.log(dataToUse);
+    // Process data for correlation calculation
+    const metrics = [
+        'avg_KD', 'avg_REV', 'avg_SIG_STR_att', 
+        'avg_SIG_STR_landed', 'avg_TOTAL_STR_att', 'avg_TOTAL_STR_landed', 
+        'avg_TD_att', 'avg_TD_landed', 'avg_HEAD_att', 'avg_HEAD_landed', 
+        'avg_BODY_att', 'avg_BODY_landed', 'avg_LEG_att', 'avg_LEG_landed', 
+        'avg_DISTANCE_att', 'avg_DISTANCE_landed', 'avg_CLINCH_att', 'avg_CLINCH_landed', 
+        'avg_GROUND_att', 'avg_GROUND_landed'
+    ];
 
-        // Process data for correlation calculation
-        const metrics = [
-            'avg_KD', 'avg_REV', 'avg_SIG_STR_att', 
-            'avg_SIG_STR_landed', 'avg_TOTAL_STR_att', 'avg_TOTAL_STR_landed', 
-            'avg_TD_att', 'avg_TD_landed', 'avg_HEAD_att', 'avg_HEAD_landed', 
-            'avg_BODY_att', 'avg_BODY_landed', 'avg_LEG_att', 'avg_LEG_landed', 
-            'avg_DISTANCE_att', 'avg_DISTANCE_landed', 'avg_CLINCH_att', 'avg_CLINCH_landed', 
-            'avg_GROUND_att', 'avg_GROUND_landed'
-        ];
-
-        // Convert to numeric and handle non-numeric values
-        dataToUse.forEach(fight => {
-            metrics.forEach(metric => {
-                fight[metric] = isNaN(parseFloat(fight[metric])) ? 0 : parseFloat(fight[metric]);
-            });
-
-            // Determine wins for brush groups
-            fight.brush1Win = brush1Fighters.includes(fight.Winner) ? 1 : 0;
-            fight.brush2Win = brush2Fighters.includes(fight.Winner) ? 1 : 0;
+    // Convert to numeric and handle non-numeric values
+    dataToUse.forEach(fight => {
+        metrics.forEach(metric => {
+            fight[metric] = isNaN(parseFloat(fight[metric])) ? 0 : parseFloat(fight[metric]);
         });
 
-        const averages = calculateAverages(dataToUse, metrics, brush1Fighters, brush2Fighters);
-
-        // Calculate correlations for brushed fighters
-        const correlationsBrush1 = calculateCorrelations(dataToUse, metrics, brush1Fighters);
-        const correlationsBrush2 = calculateCorrelations(dataToUse, metrics, brush2Fighters);
-
-        // Combine correlations
-        let combinedCorrelations = combineCorrelations(correlationsBrush1, correlationsBrush2);
-
-        console.log(combinedCorrelations);
-
-        // Define color scales based on the color scheme
-        let colorScaleBrush1, colorScaleBrush2;
-
-        if (colorScheme === 'rdBu') {
-            colorScaleBrush1 = d => colorScaleR(combinedCorrelations.find(c => c.metric === d.metric).brush1Correlation);
-            colorScaleBrush2 = d => colorScaleB(combinedCorrelations.find(c => c.metric === d.metric).brush2Correlation);
-        } else if (colorScheme === 'ylGn') {
-            colorScaleBrush1 = colorScaleBrush2 = d => colorScaleG(combinedCorrelations.find(c => c.metric === d.metric).brush1Correlation);
-        } else { // Default R&B
-            colorScaleBrush1 = () => "#ef8a62";
-            colorScaleBrush2 = () => "#67a9cf";
-        }
-
-        // Visualization setup
-        const margin = { top: 20, right: 30, bottom: 120, left: 120 },
-              width = 720 - margin.left - margin.right,
-              height = 720 - margin.top - margin.bottom;
-
-        // Create SVG
-        const svg = svgContainer.append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        // Clear any existing legends
-        svgContainer.select(".color-legend").remove();
-
-        // Append color legend based on the color scheme
-        if (colorScheme === 'rdBu') {
-            createColorLegend(svg, rdBuColorScale, width, height);
-        } else if (colorScheme === 'ylGn') {
-            createColorLegend(svg, ylGnColorScale, width, height);
-        }
-
-        // Create scales
-        const y = d3.scaleBand()
-            .range([0, height])
-            .domain(metrics)
-            .padding(.1);
-
-        const maxAverageValue = Math.max(...averages.map(a => Math.max(a.averageBrush1, a.averageBrush2)));
-        const x = d3.scaleLinear()
-            .domain([-maxAverageValue, maxAverageValue])
-            .range([0, width - 60]);
-
-        // Add Y axis
-        const yAxis = svg.append("g").call(d3.axisLeft(y).tickSize(0))
-            .attr("color", "white");
-
-        yAxis.select(".domain").remove();
-
-        // Define a diverging color scale
-        const colorScaleR = d3.scaleDiverging()
-            .domain([-1, 0, 1])
-            .interpolator(d3.interpolateRdBu);
-
-        const colorScaleB = d3.scaleDiverging()
-            .domain([1, 0, -1])
-            .interpolator(d3.interpolateRdBu);
-
-        const colorScaleG = d3.scaleDiverging()
-            .domain([1, 0, -1])
-            .interpolator(d3.interpolateYlGn);
-
-        svg.selectAll(".bar.brush1")
-            .data(averages)
-            .enter()
-            .append("rect")
-            .attr("class", "bar brush1")
-            .attr("y", d => y(d.metric))
-            .attr("x", d => x(-d.averageBrush1)) // Bars extend leftwards from the center
-            .attr("height", y.bandwidth())
-            .attr("fill", colorScaleBrush1)
-            .attr("width", d => Math.abs(x(0) - x(-d.averageBrush1))); // Width is the absolute difference
-
-        svg.selectAll(".bar.brush2")
-            .data(averages)
-            .enter()
-            .append("rect")
-            .attr("class", "bar brush2")
-            .attr("y", d => y(d.metric))
-            .attr("x", x(0)) // Bars start at the center and extend rightwards
-            .attr("height", y.bandwidth())
-            .attr("fill", colorScaleBrush2)
-            .attr("width", d => Math.abs(x(0) - x(d.averageBrush2))); // Directly use the scale for width
-
-        // Clear any existing axis before drawing a new one
-        svg.selectAll(".x-axis").remove();
-
-        // Create X axis
-        const xAxis = d3.axisBottom(x)
-            .tickSize(-height)
-            .tickFormat(function(d) {
-                return Math.abs(d).toFixed(1); // Convert negative values to positive and format
-            });
-
-        // Append the x-axis group
-        svg.append("g")
-            .attr("class", "x-axis") // Add a class for easy reference
-            .attr("transform", `translate(0, ${height})`)
-            .call(xAxis)
-            .selectAll(".tick line")
-            .attr("stroke", function(d) {
-                return d < 0 ? "#fddbc7" : "#d1e5f0"; // Red for left side, Blue for right side
-            });
-
-        // Modify the colors of the labels
-        svg.selectAll(".x-axis .tick text")
-            .attr("fill", function(d) {
-                return d < 0 ? "#fddbc7" : "#d1e5f0"; // Red for left side, Blue for right side
-            });
-
-        svg.select(".x-axis .domain").remove();
-    
-    }).catch(function(error) {
-        console.error('Error loading or processing data:', error);
+        // Determine wins for brush groups
+        fight.brush1Win = brush1Fighters.includes(fight.Winner) ? 1 : 0;
+        fight.brush2Win = brush2Fighters.includes(fight.Winner) ? 1 : 0;
     });
+
+    const averages = calculateAverages(dataToUse, metrics, brush1Fighters, brush2Fighters);
+
+    // Calculate correlations for brushed fighters
+    const correlationsBrush1 = calculateCorrelations(dataToUse, metrics, brush1Fighters);
+    const correlationsBrush2 = calculateCorrelations(dataToUse, metrics, brush2Fighters);
+
+    // Combine correlations
+    let combinedCorrelations = combineCorrelations(correlationsBrush1, correlationsBrush2);
+
+    console.log(combinedCorrelations);
+
+    // Define color scales based on the color scheme
+    let colorScaleBrush1, colorScaleBrush2;
+
+    if (colorScheme === 'rdBu') {
+        colorScaleBrush1 = d => colorScaleR(combinedCorrelations.find(c => c.metric === d.metric).brush1Correlation);
+        colorScaleBrush2 = d => colorScaleB(combinedCorrelations.find(c => c.metric === d.metric).brush2Correlation);
+    } else if (colorScheme === 'ylGn') {
+        colorScaleBrush1 = colorScaleBrush2 = d => colorScaleG(combinedCorrelations.find(c => c.metric === d.metric).brush1Correlation);
+    } else { // Default R&B
+        colorScaleBrush1 = () => "#ef8a62";
+        colorScaleBrush2 = () => "#67a9cf";
+    }
+
+    // Visualization setup
+    const margin = { top: 20, right: 30, bottom: 120, left: 120 },
+            width = 720 - margin.left - margin.right,
+            height = 720 - margin.top - margin.bottom;
+
+    // Create SVG
+    const svg = svgContainer.append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    // Clear any existing legends
+    svgContainer.select(".color-legend").remove();
+
+    // Append color legend based on the color scheme
+    if (colorScheme === 'rdBu') {
+        createColorLegend(svg, rdBuColorScale, width, height);
+    } else if (colorScheme === 'ylGn') {
+        createColorLegend(svg, ylGnColorScale, width, height);
+    }
+
+    // Create scales
+    const y = d3.scaleBand()
+        .range([0, height])
+        .domain(metrics)
+        .padding(.1);
+
+    const maxAverageValue = Math.max(...averages.map(a => Math.max(a.averageBrush1, a.averageBrush2)));
+    const x = d3.scaleLinear()
+        .domain([-maxAverageValue, maxAverageValue])
+        .range([0, width - 60]);
+
+    // Add Y axis
+    const yAxis = svg.append("g").call(d3.axisLeft(y).tickSize(0))
+        .attr("color", "white");
+
+    yAxis.select(".domain").remove();
+
+    // Define a diverging color scale
+    const colorScaleR = d3.scaleDiverging()
+        .domain([-1, 0, 1])
+        .interpolator(d3.interpolateRdBu);
+
+    const colorScaleB = d3.scaleDiverging()
+        .domain([1, 0, -1])
+        .interpolator(d3.interpolateRdBu);
+
+    const colorScaleG = d3.scaleDiverging()
+        .domain([1, 0, -1])
+        .interpolator(d3.interpolateYlGn);
+
+    svg.selectAll(".bar.brush1")
+        .data(averages)
+        .enter()
+        .append("rect")
+        .attr("class", "bar brush1")
+        .attr("y", d => y(d.metric))
+        .attr("x", d => x(-d.averageBrush1)) // Bars extend leftwards from the center
+        .attr("height", y.bandwidth())
+        .attr("fill", colorScaleBrush1)
+        .attr("width", d => Math.abs(x(0) - x(-d.averageBrush1))); // Width is the absolute difference
+
+    svg.selectAll(".bar.brush2")
+        .data(averages)
+        .enter()
+        .append("rect")
+        .attr("class", "bar brush2")
+        .attr("y", d => y(d.metric))
+        .attr("x", x(0)) // Bars start at the center and extend rightwards
+        .attr("height", y.bandwidth())
+        .attr("fill", colorScaleBrush2)
+        .attr("width", d => Math.abs(x(0) - x(d.averageBrush2))); // Directly use the scale for width
+
+    // Clear any existing axis before drawing a new one
+    svg.selectAll(".x-axis").remove();
+
+    // Create X axis
+    const xAxis = d3.axisBottom(x)
+        .tickSize(-height)
+        .tickFormat(function(d) {
+            return Math.abs(d).toFixed(1); // Convert negative values to positive and format
+        });
+
+    // Append the x-axis group
+    svg.append("g")
+        .attr("class", "x-axis") // Add a class for easy reference
+        .attr("transform", `translate(0, ${height})`)
+        .call(xAxis)
+        .selectAll(".tick line")
+        .attr("stroke", function(d) {
+            return d < 0 ? "#fddbc7" : "#d1e5f0"; // Red for left side, Blue for right side
+        });
+
+    // Modify the colors of the labels
+    svg.selectAll(".x-axis .tick text")
+        .attr("fill", function(d) {
+            return d < 0 ? "#fddbc7" : "#d1e5f0"; // Red for left side, Blue for right side
+        });
+
+    svg.select(".x-axis .domain").remove();
+
 }
 
 function calculateAverages(data, metrics, brush1Fighters, brush2Fighters) {
