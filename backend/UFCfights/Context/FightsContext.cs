@@ -8,4 +8,3 @@ public class FightsContext : DbContext
     public FightsContext(DbContextOptions<FightsContext> options) : base(options) { }
     public DbSet<Fight> Fights => Set<Fight>();
 }
-

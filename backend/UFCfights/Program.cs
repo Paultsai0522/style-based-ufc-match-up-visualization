@@ -5,9 +5,14 @@ using UFCfights.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+// builder.Services.AddDbContext<FightsContext> (options => 
+//     options.UseSqlite("Data Source = fights.db")
+// );
 builder.Services.AddDbContext<FightsContext> (options => 
-    options.UseSqlite("Data Source = fights.db")
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"))
 );
+
 builder.Services.AddScoped<FightsService>();
 builder.Services.AddCors(options =>
 {
