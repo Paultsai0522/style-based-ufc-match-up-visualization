@@ -450,16 +450,18 @@ function findAndDrawFights(fightData) {
 }
 
 // Load the fights data
-
-fetch(fightsDataPath)
-    .then(response => response.json())
-    .then(loadedFightData => {
+async function loadFightData() {
+    try {
+        const response = await fetch(fightsDataPath);
+        const loadedFightData = await response.json();
         fightData = loadedFightData;
-        // Call findAndDrawFights initially if you want to draw arcs based on some default selection
-    })
-    .catch(error => {
+    }
+    catch (error) {
         console.error("Error loading fight data:", error);
-    });
+    }
+}
+
+loadFightData();
 
 function countWinners() {
     let winnersCount = {

@@ -26,8 +26,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.MapControllers();
 app.UseCors("FrontendApp");
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
