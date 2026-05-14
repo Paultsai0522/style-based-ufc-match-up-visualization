@@ -8,8 +8,11 @@ public class Fight
     [Key]
     public int Id { get; set; }
 
+    [MaxLength(100)]
     public string? R_fighter { get; set; }
+    [MaxLength(100)]
     public string? B_fighter { get; set; }
+    [MaxLength(100)]
     public string? Referee { get; set; }
     public string? Date { get; set; }
     public string? Location { get; set; }
