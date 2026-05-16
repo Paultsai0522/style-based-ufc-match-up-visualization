@@ -10,6 +10,8 @@ public class FightMap : ClassMap<Fight>
     {
         AutoMap(CultureInfo.InvariantCulture);
 
+        Map(m => m.R_Fighter).Name("R_fighter");
+        Map(m => m.B_Fighter).Name("B_fighter");
         Map(m => m.Date).Name("date");
         Map(m => m.Location).Name("location");
         Map(m => m.TitleBout).Name("title_bout");

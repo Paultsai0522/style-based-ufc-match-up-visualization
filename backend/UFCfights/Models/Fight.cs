@@ -9,9 +9,9 @@ public class Fight
     public int Id { get; set; }
 
     [MaxLength(100)]
-    public string? R_fighter { get; set; }
+    public string? R_Fighter { get; set; }
     [MaxLength(100)]
-    public string? B_fighter { get; set; }
+    public string? B_Fighter { get; set; }
     [MaxLength(100)]
     public string? Referee { get; set; }
     public string? Date { get; set; }
@@ -20,50 +20,27 @@ public class Fight
     public bool? TitleBout { get; set; }
     public string? WeightClass { get; set; }
 
-    public double? B_avg_KD { get; set; }
     public double? B_avg_opp_KD { get; set; }
-    public double? B_avg_SIG_STR_pct { get; set; }
     public double? B_avg_opp_SIG_STR_pct { get; set; }
-    public double? B_avg_TD_pct { get; set; }
     public double? B_avg_opp_TD_pct { get; set; }
-    public double? B_avg_SUB_ATT { get; set; }
     public double? B_avg_opp_SUB_ATT { get; set; }
-    public double? B_avg_REV { get; set; }
     public double? B_avg_opp_REV { get; set; }
-    public double? B_avg_SIG_STR_att { get; set; }
-    public double? B_avg_SIG_STR_landed { get; set; }
     public double? B_avg_opp_SIG_STR_att { get; set; }
     public double? B_avg_opp_SIG_STR_landed { get; set; }
-    public double? B_avg_TOTAL_STR_att { get; set; }
-    public double? B_avg_TOTAL_STR_landed { get; set; }
     public double? B_avg_opp_TOTAL_STR_att { get; set; }
     public double? B_avg_opp_TOTAL_STR_landed { get; set; }
-    public double? B_avg_TD_att { get; set; }
-    public double? B_avg_TD_landed { get; set; }
     public double? B_avg_opp_TD_att { get; set; }
     public double? B_avg_opp_TD_landed { get; set; }
-    public double? B_avg_HEAD_att { get; set; }
-    public double? B_avg_HEAD_landed { get; set; }
     public double? B_avg_opp_HEAD_att { get; set; }
     public double? B_avg_opp_HEAD_landed { get; set; }
-    public double? B_avg_BODY_att { get; set; }
-    public double? B_avg_BODY_landed { get; set; }
     public double? B_avg_opp_BODY_att { get; set; }
     public double? B_avg_opp_BODY_landed { get; set; }
-    public double? B_avg_LEG_att { get; set; }
-    public double? B_avg_LEG_landed { get; set; }
     public double? B_avg_opp_LEG_att { get; set; }
     public double? B_avg_opp_LEG_landed { get; set; }
-    public double? B_avg_DISTANCE_att { get; set; }
-    public double? B_avg_DISTANCE_landed { get; set; }
     public double? B_avg_opp_DISTANCE_att { get; set; }
     public double? B_avg_opp_DISTANCE_landed { get; set; }
-    public double? B_avg_CLINCH_att { get; set; }
-    public double? B_avg_CLINCH_landed { get; set; }
     public double? B_avg_opp_CLINCH_att { get; set; }
     public double? B_avg_opp_CLINCH_landed { get; set; }
-    public double? B_avg_GROUND_att { get; set; }
-    public double? B_avg_GROUND_landed { get; set; }
     public double? B_avg_opp_GROUND_att { get; set; }
     public double? B_avg_opp_GROUND_landed { get; set; }
 
@@ -99,50 +76,27 @@ public class Fight
     public double? B_Reach_cms { get; set; }
     public double? B_Weight_lbs { get; set; }
 
-    public double? R_avg_KD { get; set; }
     public double? R_avg_opp_KD { get; set; }
-    public double? R_avg_SIG_STR_pct { get; set; }
     public double? R_avg_opp_SIG_STR_pct { get; set; }
-    public double? R_avg_TD_pct { get; set; }
     public double? R_avg_opp_TD_pct { get; set; }
-    public double? R_avg_SUB_ATT { get; set; }
     public double? R_avg_opp_SUB_ATT { get; set; }
-    public double? R_avg_REV { get; set; }
     public double? R_avg_opp_REV { get; set; }
-    public double? R_avg_SIG_STR_att { get; set; }
-    public double? R_avg_SIG_STR_landed { get; set; }
     public double? R_avg_opp_SIG_STR_att { get; set; }
     public double? R_avg_opp_SIG_STR_landed { get; set; }
-    public double? R_avg_TOTAL_STR_att { get; set; }
-    public double? R_avg_TOTAL_STR_landed { get; set; }
     public double? R_avg_opp_TOTAL_STR_att { get; set; }
     public double? R_avg_opp_TOTAL_STR_landed { get; set; }
-    public double? R_avg_TD_att { get; set; }
-    public double? R_avg_TD_landed { get; set; }
     public double? R_avg_opp_TD_att { get; set; }
     public double? R_avg_opp_TD_landed { get; set; }
-    public double? R_avg_HEAD_att { get; set; }
-    public double? R_avg_HEAD_landed { get; set; }
     public double? R_avg_opp_HEAD_att { get; set; }
     public double? R_avg_opp_HEAD_landed { get; set; }
-    public double? R_avg_BODY_att { get; set; }
-    public double? R_avg_BODY_landed { get; set; }
     public double? R_avg_opp_BODY_att { get; set; }
     public double? R_avg_opp_BODY_landed { get; set; }
-    public double? R_avg_LEG_att { get; set; }
-    public double? R_avg_LEG_landed { get; set; }
     public double? R_avg_opp_LEG_att { get; set; }
     public double? R_avg_opp_LEG_landed { get; set; }
-    public double? R_avg_DISTANCE_att { get; set; }
-    public double? R_avg_DISTANCE_landed { get; set; }
     public double? R_avg_opp_DISTANCE_att { get; set; }
     public double? R_avg_opp_DISTANCE_landed { get; set; }
-    public double? R_avg_CLINCH_att { get; set; }
-    public double? R_avg_CLINCH_landed { get; set; }
     public double? R_avg_opp_CLINCH_att { get; set; }
     public double? R_avg_opp_CLINCH_landed { get; set; }
-    public double? R_avg_GROUND_att { get; set; }
-    public double? R_avg_GROUND_landed { get; set; }
     public double? R_avg_opp_GROUND_att { get; set; }
     public double? R_avg_opp_GROUND_landed { get; set; }
 

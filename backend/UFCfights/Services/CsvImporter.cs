@@ -8,27 +8,50 @@ namespace UFCfights.Services;
 
 public static class CsvImporter
 {
-    public static async Task ImportFightsAsync(FightsContext db, string csvPath)
+    public static async Task ImportFightsAsync(FightsContext db, string csvPath, bool forceImport = false)
     {
-        // TODO: Add update logic for existing fights instead of skipping import if fights already exist
-        if (db.Fights.Any())
+        var fightsExist = db.Fights.Any();
+        var fighterStatsExist = db.FighterStats.Any();
+
+        if (forceImport)
         {
-            Console.WriteLine("Fights already exist in the database. Skipping import.");
+            db.Fights.RemoveRange(db.Fights);
+            db.FighterStats.RemoveRange(db.FighterStats);
+            await db.SaveChangesAsync();
+            fightsExist = false;
+            fighterStatsExist = false;
+        }
+
+        if (!forceImport && fightsExist && fighterStatsExist)
+        {
+            Console.WriteLine("Fight data already exists in the database. Skipping import.");
             return;
         }
 
-        using var reader = new StreamReader(csvPath);
-        using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+        var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HeaderValidated = null,
             MissingFieldFound = null
-        });
+        };
 
-        csv.Context.RegisterClassMap<FightMap>();
+        if (!fightsExist)
+        {
+            using var fightsReader = new StreamReader(csvPath);
+            using var fightsCsv = new CsvReader(fightsReader, csvConfig);
+            fightsCsv.Context.RegisterClassMap<FightMap>();
+            var fights = fightsCsv.GetRecords<Fight>().ToList();
+            db.Fights.AddRange(fights);
+        }
 
-        var fights = csv.GetRecords<Fight>().ToList();
+        if (!fighterStatsExist)
+        {
+            using var statsReader = new StreamReader(csvPath);
+            using var statsCsv = new CsvReader(statsReader, csvConfig);
+            statsCsv.Context.RegisterClassMap<FighterStatsMap>();
+            var fighterStats = statsCsv.GetRecords<FighterStats>().ToList();
+            db.FighterStats.AddRange(fighterStats);
+        }
 
-        db.Fights.AddRange(fights);
         await db.SaveChangesAsync();
     }
 }

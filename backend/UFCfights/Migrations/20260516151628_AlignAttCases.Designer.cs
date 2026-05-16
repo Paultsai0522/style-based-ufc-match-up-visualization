@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UFCfights.Data;
 
@@ -10,9 +11,11 @@ using UFCfights.Data;
 namespace UFCfights.Migrations
 {
     [DbContext(typeof(FightsContext))]
-    partial class FightsContextModelSnapshot : ModelSnapshot
+    [Migration("20260516151628_AlignAttCases")]
+    partial class AlignAttCases
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,207 +353,156 @@ namespace UFCfights.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("B_Fighter")
-                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasJsonPropertyName("b_fighter");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<double?>("B_avg_BODY_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_BODY_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_BODY_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_BODY_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_CLINCH_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_CLINCH_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_CLINCH_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_CLINCH_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_DISTANCE_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_DISTANCE_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_DISTANCE_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_DISTANCE_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_GROUND_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_GROUND_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_GROUND_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_GROUND_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_HEAD_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_HEAD_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_HEAD_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_HEAD_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_KD")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_KD");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_LEG_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_LEG_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_LEG_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_LEG_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_REV")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_REV");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_SIG_STR_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_SIG_STR_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_SIG_STR_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_SIG_STR_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_SIG_STR_pct")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_SIG_STR_pct");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_SUB_ATT")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_SUB_ATT");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_TD_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_TD_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_TD_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_TD_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_TD_pct")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_TD_pct");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_TOTAL_STR_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_TOTAL_STR_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("B_avg_TOTAL_STR_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("b_avg_TOTAL_STR_landed");
+                        .HasColumnType("float");
 
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("R_Fighter")
-                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasJsonPropertyName("r_fighter");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<double?>("R_avg_BODY_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_BODY_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_BODY_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_BODY_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_CLINCH_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_CLINCH_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_CLINCH_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_CLINCH_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_DISTANCE_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_DISTANCE_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_DISTANCE_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_DISTANCE_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_GROUND_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_GROUND_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_GROUND_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_GROUND_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_HEAD_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_HEAD_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_HEAD_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_HEAD_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_KD")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_KD");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_LEG_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_LEG_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_LEG_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_LEG_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_REV")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_REV");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_SIG_STR_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_SIG_STR_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_SIG_STR_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_SIG_STR_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_SIG_STR_pct")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_SIG_STR_pct");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_SUB_ATT")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_SUB_ATT");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_TD_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_TD_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_TD_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_TD_landed");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_TD_pct")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_TD_pct");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_TOTAL_STR_att")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_TOTAL_STR_att");
+                        .HasColumnType("float");
 
                     b.Property<double?>("R_avg_TOTAL_STR_landed")
-                        .HasColumnType("float")
-                        .HasJsonPropertyName("r_avg_TOTAL_STR_landed");
+                        .HasColumnType("float");
 
                     b.Property<string>("Winner")
-                        .HasColumnType("nvarchar(max)")
-                        .HasJsonPropertyName("Winner");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -17,11 +17,16 @@ public class FightsService
         return _db.Fights.ToList();
     }
 
-    public List<Fight> GetFightsByMatchUp(List<string> brush1_fighters, List<string> brush2_fighters)
+    public List<FighterStats> GetFightsByMatchUp(List<string> brush1_fighters, List<string> brush2_fighters)
     {
-        return _db.Fights
-                  .Where(f => (brush1_fighters.Contains(f.B_fighter) && brush2_fighters.Contains(f.R_fighter) ||
-                              brush1_fighters.Contains(f.R_fighter) && brush2_fighters.Contains(f.B_fighter)) && f.Winner != null)
+        return _db.FighterStats
+                  .Where(f =>
+                      (
+                          (brush1_fighters.Contains(f.B_Fighter ?? string.Empty) && brush2_fighters.Contains(f.R_Fighter ?? string.Empty)) ||
+                          (brush1_fighters.Contains(f.R_Fighter ?? string.Empty) && brush2_fighters.Contains(f.B_Fighter ?? string.Empty))
+                      ) &&
+                      f.Winner != null
+                  )
                   .ToList();
     }
 }

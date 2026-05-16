@@ -3,6 +3,7 @@ using UFCfights.Data;
 using UFCfights.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var forceImport = args.Any(a => string.Equals(a, "--force-import", StringComparison.OrdinalIgnoreCase));
 
 builder.Services.AddControllers();
 
@@ -33,7 +34,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<FightsContext>();
     await db.Database.MigrateAsync();
-    await CsvImporter.ImportFightsAsync(db, "./Data/data.csv");
+    await CsvImporter.ImportFightsAsync(db, "./Data/data.csv", forceImport);
 }
 
 app.Run();
