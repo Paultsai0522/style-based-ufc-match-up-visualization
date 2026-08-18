@@ -16,6 +16,7 @@ public class FighterStats
     [MaxLength(100)]
     [JsonPropertyName("r_fighter")]
     public string? R_Fighter { get; set; }
+    [Required]
     public string? Date { get; set; }
     [JsonPropertyName("Winner")]
     public string? Winner { get; set; }
