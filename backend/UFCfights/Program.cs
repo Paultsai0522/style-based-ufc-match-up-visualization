@@ -7,6 +7,8 @@ var forceImport = args.Any(a => string.Equals(a, "--force-import", StringCompari
 
 builder.Services.AddControllers();
 
+builder.Services.AddDistributedMemoryCache();
+
 // builder.Services.AddDbContext<FightsContext> (options => 
 //     options.UseSqlite("Data Source = fights.db")
 // );

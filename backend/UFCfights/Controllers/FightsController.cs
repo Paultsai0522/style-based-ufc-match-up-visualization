@@ -16,9 +16,9 @@ public class FightsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetFights()
+    public async Task<IActionResult> GetFights()
     {
-        var fights = _fightsService.GetFights();
+        var fights = await _fightsService.GetFightsAsync();
         return Ok(fights);
     }
 
