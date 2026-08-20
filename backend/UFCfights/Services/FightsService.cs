@@ -1,20 +1,50 @@
 using UFCfights.Models;
 using UFCfights.Data;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace UFCfights.Services;
 
 public class FightsService
 {
     private readonly FightsContext _db;
+    private readonly IDistributedCache _cache;
 
-    public FightsService(FightsContext db)
+    public FightsService(FightsContext db, IDistributedCache cache)
     {
         _db = db;
+        _cache = cache;
     }
 
     public List<Fight> GetFights()
     {
         return _db.Fights.ToList();
+    }
+
+    public async Task<List<Fight>> GetFightsAsync()
+    {
+        const string cacheKey = "fights:all";
+
+        var cached = await _cache.GetStringAsync(cacheKey);
+        if (cached != null)
+        {
+            return JsonSerializer.Deserialize<List<Fight>>(cached) ?? new List<Fight>();
+        }
+
+        var fights = GetFights();
+
+        await _cache.SetStringAsync(
+            cacheKey,
+            JsonSerializer.Serialize(fights),
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
+            }
+        );
+        
+        return fights;
     }
 
     public List<FighterStats> GetFightsByMatchUp(List<string> brush1_fighters, List<string> brush2_fighters)
@@ -28,6 +58,35 @@ public class FightsService
                       f.Winner != null
                   )
                   .ToList();
+    }
+
+    public async Task<List<FighterStats>> GetFightsByMatchUpAsync(List<string> brush1_fighters, List<string> brush2_fighters)
+    {
+        var cacheKey = $"matchup:{HashBrushRequest(brush1_fighters, brush2_fighters)}";
+
+        var cached = await _cache.GetStringAsync(cacheKey);
+        if (!string.IsNullOrWhiteSpace(cached))
+        {
+            return JsonSerializer.Deserialize<List<FighterStats>>(cached) ?? new List<FighterStats>();
+        }
+
+        var fights = _db.FighterStats
+                        .Where(f => (
+                            (brush1_fighters.Contains(f.B_Fighter ?? string.Empty) && (brush2_fighters.Contains(f.R_Fighter ?? string.Empty)) ||
+                            (brush1_fighters.Contains(f.R_Fighter ?? string.Empty) && brush2_fighters.Contains(f.B_Fighter ?? string.Empty)))
+                        ) && f.Winner != null)
+                        .ToList();
+
+        await _cache.SetStringAsync(
+            cacheKey,
+            JsonSerializer.Serialize(fights),
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+            }
+        );
+
+        return fights;
     }
 
     public List<FighterStats> GetFighterStats(string fighterName)
@@ -101,5 +160,26 @@ public class FightsService
             .ToList();
 
         return rStats.Concat(bStats).ToList();
+    }
+
+    private static string HashBrushRequest(List<string> brush1Fighters, List<string> brush2Fighters)
+    {
+        var brush1 = NormalizeFighterList(brush1Fighters);
+        var brush2 = NormalizeFighterList(brush2Fighters);
+
+        var rawKey = $"{brush1}::{brush2}";
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawKey));
+
+        return Convert.ToHexString(bytes);
+    }
+
+    private static string NormalizeFighterList(List<string> fighters)
+    {
+        return string.Join(
+            "|",
+            fighters.Where(name => !string.IsNullOrWhiteSpace(name))
+                    .Select(name => name.Trim())
+                    .OrderBy(name => name)
+        );
     }
 }
